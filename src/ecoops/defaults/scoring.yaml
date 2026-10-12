@@ -1,0 +1,38 @@
+# EcoOps Opportunity Score (0-100).
+#
+#   impact     = sum(mix_k * log1p(annual_saving_k) / log1p(max_saving_k))   k in {co2e, cost, energy}
+#   raw        = 100 * (w_impact * impact + w_confidence * confidence + w_ease * ease[effort])
+#   score      = raw * status_multiplier[constraint_status]
+#
+# Scores rank actions and assets, never people or teams.
+
+weights:
+  impact: 0.55
+  confidence: 0.25
+  ease: 0.20
+
+impact_mix:
+  co2e_kg: 0.5
+  cost: 0.3
+  energy_kwh: 0.2
+
+ease:
+  S: 1.0
+  M: 0.6
+  L: 0.3
+
+status_multiplier:
+  clear: 1.0
+  conditional: 0.85
+  blocked: 0.0
+
+next_step:
+  automate_min_confidence: 0.80
+  pilot_min_confidence: 0.65
+  investigate_min_confidence: 0.45
+  review_days: 14
+
+pathways:
+  balanced_digital_share: 0.7
+  balanced_max_actions: 10
+  quick_win_min_confidence: 0.7

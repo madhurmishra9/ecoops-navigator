@@ -1,0 +1,84 @@
+# EcoOps Navigator — assumption register (conversion factors and prices).
+#
+# Every value here is an ASSUMPTION used by a prototype. None of it is
+# production-grade carbon accounting. Each section has an entry under
+# `references` so an analyst can challenge it and replace it with
+# organisation-approved values (override file via --config / ECOOPS_CONFIG_DIR).
+
+meta:
+  currency: GBP
+  annualisation_days: 365
+
+compute:
+  min_watts_per_vcpu: 0.71        # idle power per vCPU
+  max_watts_per_vcpu: 4.26        # full-load power per vCPU
+  memory_kwh_per_gb_hour: 0.000392
+  pue: 1.10
+  idle_utilisation: 0.02
+  ci_build_utilisation: 0.60      # Jenkins executors while a build runs
+  deploy_utilisation: 0.40        # Harness delegate / test stages during a deploy
+  price_per_vcpu_hour: 0.026
+  price_per_gb_mem_hour: 0.0035
+
+bigquery:
+  slot_hour_vcpu_equivalent: 1.0
+  slot_utilisation: 0.5
+  price_per_tib_scanned: 5.00
+
+storage:
+  replication_factor: 2
+  hdd_wh_per_tb_hour: 0.65
+  ssd_wh_per_tb_hour: 1.20
+  persistent_disk_price_per_gb_month: 0.14
+  price_per_gb_month:
+    STANDARD: 0.020
+    NEARLINE: 0.010
+    COLDLINE: 0.005
+    ARCHIVE: 0.0019
+
+grid_intensity_kg_per_kwh:
+  europe-west2: 0.18
+  europe-west1: 0.11
+  europe-north1: 0.04
+  default: 0.20
+
+low_carbon_regions: [europe-north1, europe-west1]
+
+facilities:
+  grid_intensity_kg_per_kwh: 0.207
+  price_per_kwh: 0.24
+  hvac_occupancy_responsiveness: 0.35   # share of HVAC+lighting energy that tracks occupancy
+  consolidation_saving_fraction: 0.70   # share of a floor's energy avoided if it is closed
+
+travel:
+  kg_per_passenger_km:
+    flight_domestic: 0.246
+    rail: 0.035
+    car: 0.166
+  cost_per_passenger_km:
+    flight_domestic: 0.32
+    rail: 0.22
+    car: 0.45
+
+print:
+  kg_per_page: 0.0046
+  cost_per_page: 0.012
+  duplex_page_reduction: 0.40     # pages avoided per single-sided page when duplex is default
+  uncollected_reduction: 0.80     # uncollected jobs avoided by pull/follow-me printing
+
+waste:
+  kg_co2e_per_kg_general: 0.467
+  kg_co2e_per_kg_recycled: 0.021
+  cost_per_kg_general: 0.18
+  cost_per_kg_recycled: 0.08
+
+references:
+  compute: "Cloud Carbon Footprint (CCF) methodology — approximate GCP average min/max watts per vCPU, memory coefficient and PUE. Verify before use."
+  bigquery: "Prototype assumption: one slot-hour ~ one vCPU-hour at 50% utilisation. On-demand price illustrative."
+  storage: "CCF storage coefficients (HDD/SSD Wh per TB-hour) x replication factor. Prices are illustrative list prices, not negotiated rates."
+  grid_intensity_kg_per_kwh: "Illustrative location-based grid intensities. Replace with Google Cloud region carbon data for the reporting year."
+  low_carbon_regions: "Candidate regions for flexible batch workloads, subject to data-residency and latency review."
+  facilities: "UK grid factor approximates the UK Government GHG conversion factor for electricity. Responsiveness and consolidation fractions are analyst assumptions."
+  travel: "Illustrative UK Government GHG conversion factors per passenger-km. Verify for the reporting year."
+  print: "Illustrative lifecycle factor per A4 page. Analyst assumption."
+  waste: "Illustrative UK Government GHG conversion factors for waste. Verify for the reporting year."

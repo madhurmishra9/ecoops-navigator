@@ -1,0 +1,66 @@
+# Hotspot detector thresholds. Deterministic and transparent by design:
+# every flag can be traced back to one of these numbers.
+
+dataflow_rightsizing:
+  cpu_p95_max: 0.35          # median per-run p95 CPU must be at or below this
+  mem_p95_max: 0.45          # ... and median per-run p95 memory at or below this
+  min_runs: 10
+  target_utilisation: 0.65   # size the new worker pool so the PEAK run lands here
+  runtime_penalty: 0.05      # assumed runtime increase with fewer workers
+
+region_shift:
+  min_intensity_reduction: 0.30
+
+bigquery_scans:
+  scan_to_change_ratio_min: 20
+  min_runs: 10
+  incremental_read_multiplier: 3.0   # incremental merge reads ~3x the changed data
+
+bigquery_schedule:
+  unchanged_run_share_min: 0.5
+  min_runs_per_day: 2
+
+dataproc_idle:
+  idle_ratio_min: 0.6
+  buffer_hours_per_day: 0.5
+
+gcs_lifecycle:
+  stale_share_min: 0.4
+  min_size_gb: 500
+  delete_purposes: [temp, scratch, logs]
+  deletable_share_of_stale: 0.9
+  transition_target:
+    logs: ARCHIVE
+    default: COLDLINE
+
+jenkins_builds:
+  unchanged_share_min: 0.5
+
+jenkins_artifacts:
+  max_retained_artifacts: 50
+
+harness_deployments:
+  redundant_share_min: 0.3
+
+kubernetes_offhours:
+  offhours_util_max: 0.15
+  business_hours: [8, 19]          # [start, end) in local hours
+  business_weekdays: [0, 1, 2, 3, 4]
+  min_nodes_offhours: 6
+
+facilities_occupancy:
+  occupancy_max: 0.35
+  consolidation_occupancy_max: 0.20
+
+travel_mode_shift:
+  max_rail_distance_km: 700
+  rail_feasible_routes: [LON-EDI, LON-MAN, LON-GLA, LON-LDS]
+  adoption_share: 0.7
+
+print_efficiency:
+  duplex_share_min: 0.6
+  uncollected_share_max: 0.08
+
+waste_segregation:
+  recycling_rate_min: 0.6
+  achievable_recycling_rate: 0.7

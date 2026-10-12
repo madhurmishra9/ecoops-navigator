@@ -1,0 +1,62 @@
+# Operational guardrails. A recommendation that is attractive on carbon or
+# cost alone can still be BLOCKED (needs a human decision) or CONDITIONAL
+# (needs evidence or approval first). Matching is on the opportunity's
+# action_class plus attributes from the asset register.
+#
+#   effect: block        -> score 0, routed to human review with reason/alternative
+#   effect: conditional  -> score x status_multiplier, prerequisite added
+
+rules:
+  - id: RES-01
+    category: resilience
+    effect: block
+    when:
+      resilience_tier: [tier-0]
+      action_class: [schedule_off, ephemeral_cluster, consolidate_floor, rightsize]
+    reason: "Tier-0 recovery capacity must stay provisioned to meet RTO; any change needs resilience-board approval."
+    alternative: "Review DR sizing against tested RTO/RPO in the next resilience exercise."
+
+  - id: RET-01
+    category: data_retention
+    effect: block
+    when:
+      retention_hold: [true]
+      action_class: [lifecycle_delete, artifact_retention]
+    reason: "Asset is under a regulatory retention hold; deletion is not permitted."
+    alternative: "Transition stale objects to a colder storage class (retention-compatible)."
+
+  - id: SEC-01
+    category: security
+    effect: block
+    when:
+      data_class: [restricted]
+      action_class: [region_shift]
+    reason: "Restricted data must remain in the approved UK region (data residency)."
+    alternative: "Shift the job to lower-carbon hours within the same region instead."
+
+  - id: ACC-01
+    category: accessibility
+    effect: block
+    when:
+      accessibility_critical: [true]
+      action_class: [consolidate_floor]
+    reason: "Floor hosts accessibility facilities (accessible desks, quiet room, refuge point)."
+    alternative: "Occupancy-linked HVAC and lighting scheduling keeps the floor open."
+
+  - id: PERF-01
+    category: performance
+    effect: conditional
+    when:
+      sla_bound: [true]
+      action_class: [rightsize]
+    reason: "SLA-bound workload: requires NFT / performance evidence for the proposed configuration."
+    prerequisite: "NFT evidence against SLA and quota check"
+
+  - id: CHG-01
+    category: change_control
+    effect: conditional
+    when:
+      env: [prod]
+      action_class: [region_shift, incremental_processing, event_trigger, rightsize]
+    reason: "Production change: change approval and rollback plan required."
+    prerequisite: "Approved change record with rollback plan"
