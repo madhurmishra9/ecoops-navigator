@@ -1,4 +1,4 @@
 # Every file in this repository requires review from the repository owner.
-# Combined with the "Require review from Code Owners" rule on main, only
+# Combined with the code-owner review rule in rule-for_main, only
 # @madhurmishra9's approval can satisfy the review requirement.
 * @madhurmishra9

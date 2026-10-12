@@ -101,12 +101,10 @@ See **[IMPLEMENTATION.md](IMPLEMENTATION.md)** for the step-by-step build, the d
 
 ## Contributing and branch rules
 
-`main` is protected by the `protect-main` ruleset (`.github/rulesets/protect-main.json`):
+`main` is protected by the `rule-for_main` ruleset (`.github/rulesets/rule-for_main.json`). It uses the same pattern as the owner's other repositories, plus a review requirement:
 
-- No direct pushes, force-pushes or deletion: every change goes through a pull request (squash merge, linear history).
-- One approving review is required, and it **must come from a code owner**. `.github/CODEOWNERS` lists only `@madhurmishra9`, so nobody else's approval satisfies the rule.
-- Approval is dismissed when new commits are pushed, the last push must be approved, and all review threads must be resolved.
-- CI checks `test (3.10)` and `test (3.12)` must pass on an up-to-date branch.
-- The repository admin may merge their *own* PRs without a second approver, because GitHub does not allow approving your own pull request. This bypass works only through a PR, never by direct push.
+- **Restrict creations, updates and deletions; block force pushes.** Nobody without bypass can push to, merge into, recreate or delete `main`.
+- **Pull request required,** with 1 approval from a **code owner**. `.github/CODEOWNERS` lists only `@madhurmishra9`, so no other approval counts. Approvals are dismissed on new pushes, and the last push must be approved.
+- **Bypass:** the Repository admin role (the owner), **through pull requests only**. The owner can merge PRs, including their own, which GitHub would otherwise block because you cannot approve your own PR. The owner still cannot push directly to `main`.
 
-Apply or refresh the rules with `./scripts/apply_branch_rules.sh`, or import the JSON under Settings → Rules → Rulesets → New ruleset → Import a ruleset.
+Apply or refresh it with `./scripts/apply_branch_rules.sh`, or import the JSON under Settings → Rules → Rulesets → New ruleset → Import a ruleset.
