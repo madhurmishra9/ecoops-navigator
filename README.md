@@ -98,13 +98,3 @@ grid_intensity_kg_per_kwh:
 All factors are **illustrative assumptions** with references. Replace them with organisation-approved values before using any number outside a prototype.
 
 See **[IMPLEMENTATION.md](IMPLEMENTATION.md)** for the step-by-step build, the demo script, and how to connect real telemetry.
-
-## Contributing and branch rules
-
-`main` is protected by the `rule-for_main` ruleset (`.github/rulesets/rule-for_main.json`). It uses the same pattern as the owner's other repositories, plus a review requirement:
-
-- **Restrict creations, updates and deletions; block force pushes.** Nobody without bypass can push to, merge into, recreate or delete `main`.
-- **Pull request required,** with 1 approval from a **code owner**. `.github/CODEOWNERS` lists only `@madhurmishra9`, so no other approval counts. Approvals are dismissed on new pushes, and the last push must be approved.
-- **Bypass:** the Repository admin role (the owner), **through pull requests only**. The owner can merge PRs, including their own, which GitHub would otherwise block because you cannot approve your own PR. The owner still cannot push directly to `main`.
-
-Apply or refresh it with `./scripts/apply_branch_rules.sh`, or import the JSON under Settings → Rules → Rulesets → New ruleset → Import a ruleset.
