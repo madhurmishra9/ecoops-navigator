@@ -98,3 +98,15 @@ grid_intensity_kg_per_kwh:
 All factors are **illustrative assumptions** with references. Replace them with organisation-approved values before using any number outside a prototype.
 
 See **[IMPLEMENTATION.md](IMPLEMENTATION.md)** for the step-by-step build, the demo script, and how to connect real telemetry.
+
+## Contributing and branch rules
+
+`main` is protected by the `protect-main` ruleset (`.github/rulesets/protect-main.json`):
+
+- No direct pushes, force-pushes or deletion: every change goes through a pull request (squash merge, linear history).
+- One approving review is required, and it **must come from a code owner**. `.github/CODEOWNERS` lists only `@madhurmishra9`, so nobody else's approval satisfies the rule.
+- Approval is dismissed when new commits are pushed, the last push must be approved, and all review threads must be resolved.
+- CI checks `test (3.10)` and `test (3.12)` must pass on an up-to-date branch.
+- The repository admin may merge their *own* PRs without a second approver, because GitHub does not allow approving your own pull request. This bypass works only through a PR, never by direct push.
+
+Apply or refresh the rules with `./scripts/apply_branch_rules.sh`, or import the JSON under Settings → Rules → Rulesets → New ruleset → Import a ruleset.
